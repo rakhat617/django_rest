@@ -22,7 +22,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from users.views import RegistrationViewSet, UserViewSet, ChangePasswordViewSet, UserOneAPIView, UsersAllAPIView
-
+from images.views import UserImageAPIView
 
 router = DefaultRouter()
 router.register(
@@ -58,4 +58,7 @@ urlpatterns = [
 
     path("users/", UsersAllAPIView.as_view(), name="usersall"),
     path("users/<int:pk>/", UserOneAPIView.as_view(), name="userone"),
+
+    path("image/", UserImageAPIView.as_view(), name="user-image"),
 ]
+
