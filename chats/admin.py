@@ -11,7 +11,7 @@ class ChatAdmin(admin.ModelAdmin):
 
 
 @admin.register(Message)
-class MessafeAdmin(admin.ModelAdmin):
+class MessageAdmin(admin.ModelAdmin):
     model = Message
     list_display = ("sent_at", "sender", "chat")
     list_filter = ("sent_at",)

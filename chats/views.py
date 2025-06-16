@@ -35,8 +35,9 @@ class ChatsViewSet(ViewSet):
     def create(self, request: Request) -> Response:
         serializer = ChatSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(data="created")
+        chat = serializer.save()
+        response_serializer = ChatViewSerializer(instance=chat)
+        return Response(data=response_serializer.data)
 
     @swagger_auto_schema(
         responses={
@@ -117,8 +118,9 @@ class MessagesViewSet(ViewSet):
     def create(self, request: Request) -> Response:
         serializer = MessageSerializer(data=request.data, context={"sender": request.user})
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(data="created")
+        message = serializer.save()
+        response_serializer = MessageViewSerializer(instance=message)
+        return Response(data=response_serializer.data)
 
     @swagger_auto_schema(
         responses={
