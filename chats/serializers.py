@@ -38,7 +38,7 @@ class MessageViewSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     text = serializers.CharField(max_length=2000)
     chat = ChatViewSerializer()
-    parent_message = serializers.IntegerField(required=False)
+    parent_message = serializers.PrimaryKeyRelatedField(queryset=Chat.objects.all())
     sender = UserSerializer()
 
 
@@ -46,17 +46,20 @@ class MessageSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     text = serializers.CharField(max_length=2000)
     chat = serializers.PrimaryKeyRelatedField(queryset=Chat.objects.all())
-    parent_message = serializers.IntegerField(required=False)
+    parent_message = serializers.PrimaryKeyRelatedField(queryset=Message.objects.all())
 
     def create(self, validated_data: dict):
         sender = self.context.get('sender')
-        message = Message(
-            text=validated_data.get("text"),
-            chat=validated_data.get("chat")
-        )
-        message.sender = sender
-        if validated_data.get("parent_message"):
-            message.parent_message = validated_data.get("parent_message")
+        validated_data["sender"] = sender
+        validated_data["text"] = encrypt_message(text=validated_data.get("text"))
+        message = Message(**validated_data)
+        # message = Message(
+        #     text=validated_data.get("text"),
+        #     chat=validated_data.get("chat")
+        # )
+        # message.sender = sender
+        # if validated_data.get("parent_message"):
+        #     message.parent_message = validated_data.get("parent_message")
         message.save()
         return message
 

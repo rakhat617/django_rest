@@ -111,7 +111,7 @@ class MessagesViewSet(ViewSet):
     @swagger_auto_schema(
         request_body=MessageSerializer,
         responses={
-            201: MessageSerializer,
+            201: MessageViewSerializer,
             400: "bad request"
         }
     )
